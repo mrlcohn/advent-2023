@@ -6,12 +6,24 @@ fs.readFile('in.txt', (err, data) => {
 
   const lines = data.toString()
                     .split('\n')
-                    .forEach((line) => line.split(': '))
-                    .forEach((line) => line.split(' | '))
+                    .map((line) => line.split(/:\s+/)[1])
+                    .map((line) => line.split(' | '))
+                    .map((line) => line.map(game => game.split(/[ ]+/)))
 
-  const winningIds = []
-  
-  // console.log(winningIds.reduce((acc, cur) => acc + cur, 0))
-  console.log(lines)
+  const points = []
+
+  for (let line of lines) {
+
+    let win = 0
+    for (let num of line[1]) if (line[0].includes(num)) win++
+
+    if (win > 0) points.push(parseInt(Math.pow(2, win - 1)))
+    console.log(win)
+
+  }
+
+  console.log(points.length)
+
+  console.log(points.reduce((acc, cur) => acc + cur, 0))
 
 })
